@@ -49,6 +49,39 @@ player.list <- c("barissalt",
                  "ye17",
                  "zimman")
 
+## Teams
+blue <- c("nohk",
+                 "pjmingola",
+                 "Rasern",
+                 "ye17",
+                 "zimman")
+red <- c("MikeyAK",
+                 "Modigliana",
+                 "mounteban",
+                 "dcavalier",
+                 "njjj")
+orange <- c("barissalt",
+                 "biggeek",
+                 "bzl11",
+                 "C3Crackers",
+                 "Charlie397")
+purple <- c("GaborF",
+                 "gamma57309",
+                 "humper",
+                 "marksmanma",
+                 "Mayjester")
+yellow <- c("rustysnow",
+                 "ShinyB",
+                 "v8mama",
+                 "Vulturon",
+                 "wyleia")
+green <- c("coolbeans",
+                 "cosmok",
+                 "curlingguy",
+                 "Duality",
+                 "Forrest_")
+
+
 indivpts <- function(results){
   results$IndPtsP1 <- 0
   for(i in 1:nrow(results)){
@@ -75,7 +108,7 @@ p2results <- function(results){
                      ifelse(results[5] > results[4], 3, 0))
     p2r <- c(results[2],
              results[1],
-             8 - results[3],
+             6 - results[3],
              results[5],
              results[4],
              "N",
@@ -159,6 +192,7 @@ makeplots <- function(output) {
 summarytables <- function(output){
   indiv <- output %>% group_by(Player1) %>% summarise("Individual Points" = sum(IndPtsP1, na.rm = TRUE),
                                                       "Team Points" = sum(TeamPtsP1, na.rm = TRUE))
+  colnames(indiv)[1] <- c("Player")
   return(indiv)
 }
 
@@ -191,8 +225,15 @@ tables <- summarytables(big.output)
 ## Individual Results Summary
 
 ```{r sum, echo = FALSE, warning = FALSE, fig.dim=c(10,10)}
-tables %>% kable("html") %>% kable_styling(font_size = 18, full_width = F)
-  
+tables %>% 
+  kable("html") %>% 
+  kable_styling(font_size = 18, full_width = F) %>%
+  row_spec(which(tables$Player %in% blue), color = "#3498db") %>%
+  row_spec(which(tables$Player %in% green), color = "#1f8b4c") %>%
+  row_spec(which(tables$Player %in% yellow), color = "#f1c40f") %>%
+  row_spec(which(tables$Player %in% purple), color = "#71368a") %>%
+  row_spec(which(tables$Player %in% red), color = "red") %>%
+  row_spec(which(tables$Player %in% orange), color = "orange") 
 ```
 
 ## Team Results Summary
