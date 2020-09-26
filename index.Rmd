@@ -18,36 +18,36 @@ library(dplyr)
 library(ggplot2)
 library(kableExtra)
 
-player.list <- c("barissalt",
-                 "biggeek",
-                 "bzl11",
-                 "C3Crackers",
-                 "Charlie397",
-                 "coolbeans",
-                 "cosmok",
-                 "curlingguy",
-                 "Duality",
-                 "Forrest_",
-                 "GaborF",
-                 "gamma57309",
-                 "humper",
-                 "marksmanma",
-                 "Mayjester",
-                 "MikeyAK",
-                 "Modigliana",
-                 "mounteban",
-                 "dcavalier",
-                 "njjj",
-                 "nohk",
-                 "pjmingola",
-                 "Rasern",
-                 "rustysnow",
-                 "ShinyB",
-                 "v8mama",
-                 "Vulturon",
-                 "wyleia",
-                 "ye17",
-                 "zimman")
+# player.list <- c("barissalt",
+#                  "biggeek",
+#                  "bzl11",
+#                  "C3Crackers",
+#                  "Charlie397",
+#                  "coolbeans",
+#                  "cosmok",
+#                  "curlingguy",
+#                  "Duality",
+#                  "Forrest_",
+#                  "GaborF",
+#                  "gamma57309",
+#                  "humper",
+#                  "marksmanma",
+#                  "Mayjester",
+#                  "MikeyAK",
+#                  "Modigliana",
+#                  "mounteban",
+#                  "dcavalier",
+#                  "njjj",
+#                  "nohk",
+#                  "pjmingola",
+#                  "Rasern",
+#                  "rustysnow",
+#                  "ShinyB",
+#                  "v8mama",
+#                  "Vulturon",
+#                  "wyleia",
+#                  "ye17",
+#                  "zimman")
 
 ## Teams
 blue <- c("nohk",
@@ -80,6 +80,8 @@ green <- c("coolbeans",
                  "curlingguy",
                  "Duality",
                  "Forrest_")
+
+player.list <- c(blue, green, orange, purple, red, yellow)
 
 
 indivpts <- function(results){
@@ -134,15 +136,23 @@ getoutput <- function(results, out) {
 makeplots <- function(output) {
   output$IndPtsP1 <- as.factor(output$IndPtsP1)
   
-  indpts <- ggplot(output, (aes(x = Player1, y = Player2, fill = IndPtsP1))) +
+  team.colors <- c(rep("#3498db", 5),
+                 rep("#1f8b4c", 5),
+                 rep("#f1c40f", 5),
+                 rep("#71368a", 5),
+                 rep("red", 5),
+                 rep("orange", 5))
+
+  indpts <- ggplot(output, (aes(x = Player2, y = Player1, fill = IndPtsP1))) +
     geom_tile(color = "white", size = .25) +
-    geom_text(data = output[output$IndPtsP1 != -1,], aes(label = IndPtsP1), color = "white") + theme_bw() +
+    geom_text(data = output[!is.na(output$IndPtsP1),], aes(label = IndPtsP1), color = "white") + theme_bw() +
     theme(text = element_text(size = 18),
-          axis.text.x = element_text(angle = 90, hjust = 1),
+          axis.text.x = element_text(angle = 90, hjust = 1, color = team.colors),
+          axis.text.y = element_text(color = team.colors),
           plot.title = element_text(hjust = 0.5, face = "bold"),
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank()) +
-    xlab("") + ylab("") +
+    xlab("Opponent") + ylab("You") +
     ggtitle("Individual Points Matrix") +
     scale_fill_manual(values = c("#2E382E", "#72A1E5", "#9883E5"),
                       name = "Points",
@@ -150,39 +160,42 @@ makeplots <- function(output) {
                       na.value = "white",
                       na.translate = FALSE)
   
-  posimps <- ggplot(output, (aes(x = Player1, y = Player2, fill = PosIMPsP1))) +
+  posimps <- ggplot(output, (aes(x = Player2, y = Player1, fill = PosIMPsP1))) +
     geom_tile(color = "white", size = .25) +
     geom_text(data = output[!is.na(output$PosIMPsP1),], aes(label = PosIMPsP1)) + theme_bw() +
     theme(text = element_text(size = 18),
-          axis.text.x = element_text(angle = 90, hjust = 1),
+          axis.text.x = element_text(angle = 90, hjust = 1, color = team.colors),
+          axis.text.y = element_text(color = team.colors),
           plot.title = element_text(hjust = 0.5, face = "bold"),
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank()) +
-    xlab("") + ylab("") +
+    xlab("Opponent") + ylab("You") +
     ggtitle("Individual Positive IMPs Matrix") +
     scale_fill_gradient(low = "yellow", high = "red", na.value = "white", name = "Positive IMPs")
 
-  negimps <- ggplot(output, (aes(x = Player1, y = Player2, fill = NegIMPsP1))) +
+  negimps <- ggplot(output, (aes(x = Player2, y = Player1, fill = NegIMPsP1))) +
     geom_tile(color = "white", size = .25) +
     geom_text(data = output[!is.na(output$NegIMPsP1),], aes(label = NegIMPsP1)) + theme_bw() +
     theme(text = element_text(size = 18),
-          axis.text.x = element_text(angle = 90, hjust = 1),
+          axis.text.x = element_text(angle = 90, hjust = 1, color = team.colors),
+          axis.text.y = element_text(color = team.colors),
           plot.title = element_text(hjust = 0.5, face = "bold"),
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank()) +
-    xlab("") + ylab("") +
+    xlab("Opponent") + ylab("You") +
     ggtitle("Individual Negative IMPs Matrix") +
     scale_fill_gradient(low = "yellow", high = "red", na.value = "white", name = "Negative IMPs")
   
-  teampts <- ggplot(output, (aes(x = Player1, y = Player2, fill = TeamPtsP1))) +
+  teampts <- ggplot(output, (aes(x = Player2, y = Player1, fill = TeamPtsP1))) +
     geom_tile(color = "white", size = .25) +
     geom_text(data = output[!is.na(output$TeamPtsP1),], aes(label = TeamPtsP1)) + theme_bw() +
     theme(text = element_text(size = 18),
-          axis.text.x = element_text(angle = 90, hjust = 1),
+          axis.text.x = element_text(angle = 90, hjust = 1, color = team.colors),
+          axis.text.y = element_text(color = team.colors),
           plot.title = element_text(hjust = 0.5, face = "bold"),
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank()) +
-    xlab("") + ylab("") +
+    xlab("Opponent") + ylab("You") +
     ggtitle("Team Points Matrix") +
     scale_fill_gradient(low = "yellow", high = "red", na.value = "white", name = "Team Points")
   
@@ -244,7 +257,10 @@ team.table <- summaryteam(indiv.table)
 
 ## Individual Results Summary
 
+
+
 ```{r sum, echo = FALSE, warning = FALSE, fig.dim=c(10,10)}
+
 indiv.table %>% 
   kable("html") %>% 
   kable_styling(font_size = 18, full_width = F) %>%
