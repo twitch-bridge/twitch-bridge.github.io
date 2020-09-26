@@ -7,6 +7,12 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{css center, echo = FALSE}
+h1, h2, h3 {
+  text-align: center;
+}
+```
+
 ```{r funcs, echo = FALSE, warning = FALSE, message = FALSE, fig.dim=c(10,10)}
 library(dplyr)
 library(ggplot2)
@@ -116,7 +122,9 @@ makeplots <- function(output) {
     geom_text(data = output[!is.na(output$PosIMPsP1),], aes(label = PosIMPsP1)) + theme_bw() +
     theme(text = element_text(size = 18),
           axis.text.x = element_text(angle = 90, hjust = 1),
-          plot.title = element_text(hjust = 0.5, face = "bold")) +
+          plot.title = element_text(hjust = 0.5, face = "bold"),
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank()) +
     xlab("") + ylab("") +
     ggtitle("Individual Positive IMPs Matrix") +
     scale_fill_gradient(low = "yellow", high = "red", na.value = "white", name = "Positive IMPs")
@@ -126,7 +134,9 @@ makeplots <- function(output) {
     geom_text(data = output[!is.na(output$NegIMPsP1),], aes(label = NegIMPsP1)) + theme_bw() +
     theme(text = element_text(size = 18),
           axis.text.x = element_text(angle = 90, hjust = 1),
-          plot.title = element_text(hjust = 0.5, face = "bold")) +
+          plot.title = element_text(hjust = 0.5, face = "bold"),
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank()) +
     xlab("") + ylab("") +
     ggtitle("Individual Negative IMPs Matrix") +
     scale_fill_gradient(low = "yellow", high = "red", na.value = "white", name = "Negative IMPs")
@@ -136,7 +146,9 @@ makeplots <- function(output) {
     geom_text(data = output[!is.na(output$TeamPtsP1),], aes(label = TeamPtsP1)) + theme_bw() +
     theme(text = element_text(size = 18),
           axis.text.x = element_text(angle = 90, hjust = 1),
-          plot.title = element_text(hjust = 0.5, face = "bold")) +
+          plot.title = element_text(hjust = 0.5, face = "bold"),
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank()) +
     xlab("") + ylab("") +
     ggtitle("Team Points Matrix") +
     scale_fill_gradient(low = "yellow", high = "red", na.value = "white", name = "Team Points")
@@ -174,6 +186,8 @@ plots <- makeplots(big.output)
 tables <- summarytables(big.output)
 ```
 
+# Table Results {.tabset .tabset-fade .tabset-pills}
+
 ## Individual Results Summary
 
 ```{r sum, echo = FALSE, warning = FALSE, fig.dim=c(10,10)}
@@ -182,6 +196,8 @@ tables %>% kable("html") %>% kable_styling(font_size = 18, full_width = F)
 ```
 
 ## Team Results Summary
+
+# Matrix Results {.tabset .tabset-fade .tabset-pills}
 
 ## Individual Points Matrix
 
