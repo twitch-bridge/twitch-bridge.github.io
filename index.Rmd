@@ -17,37 +17,7 @@ h1, h2, h3 {
 library(dplyr)
 library(ggplot2)
 library(kableExtra)
-
-# player.list <- c("barissalt",
-#                  "biggeek",
-#                  "bzl11",
-#                  "C3Crackers",
-#                  "Charlie397",
-#                  "coolbeans",
-#                  "cosmok",
-#                  "curlingguy",
-#                  "Duality",
-#                  "Forrest_",
-#                  "GaborF",
-#                  "gamma57309",
-#                  "humper",
-#                  "marksmanma",
-#                  "Mayjester",
-#                  "MikeyAK",
-#                  "Modigliana",
-#                  "mounteban",
-#                  "dcavalier",
-#                  "njjj",
-#                  "nohk",
-#                  "pjmingola",
-#                  "Rasern",
-#                  "rustysnow",
-#                  "ShinyB",
-#                  "v8mama",
-#                  "Vulturon",
-#                  "wyleia",
-#                  "ye17",
-#                  "zimman")
+library(readr)
 
 ## Teams
 blue <- c("nohk",
@@ -87,11 +57,15 @@ player.list <- c(blue, green, orange, purple, red, yellow)
 indivpts <- function(results){
   results$IndPtsP1 <- 0
   for(i in 1:nrow(results)){
-    ifelse(results$PosIMPsP1[i] == results$NegIMPsP1[i], 
+    if(results$Forfeit[i] == "Y"){
+      results$IndPtsP1[i] <- 3
+    } else {
+      ifelse(results$PosIMPsP1[i] == results$NegIMPsP1[i], 
            results$IndPtsP1[i] <- 1,
            ifelse(results$PosIMPsP1[i] > results$NegIMPsP1[i],
                   results$IndPtsP1[i] <- 3,
                   results$IndPtsP1[i] <- 0))
+    }
   }
   return(results)
 }
@@ -104,6 +78,8 @@ p2results <- function(results){
              results[5],
              results[4],
              "Y",
+             results[8],
+             results[7],
              0)
   } else {
     indpts <- ifelse(results[5] == results[4], 1, 
@@ -114,6 +90,8 @@ p2results <- function(results){
              results[5],
              results[4],
              "N",
+             results[8],
+             results[7],
              indpts)
   }
   return(p2r)
@@ -228,6 +206,24 @@ summaryteam <- function(indiv) {
   return(team)
 }
 
+benched <- function(output){
+  for(i in 1:nrow(output)){
+    if(output$BenchP1[i] == "Y"){
+      output$TeamPtsP1[i] <- 0
+    }
+  }
+  return(output)
+}
+
+
+importdata <- function(path){
+  data <- read_csv(path, skip = 1)
+  data <- data[,c(1,6,3,2,7,8,4,9)]
+  colnames(data) <- c("Player1", "Player2","TeamPtsP1","PosIMPsP1",
+                      "NegIMPsP1","Forfeit","BenchP1","BenchP2")
+  return(data)
+}
+
 starting.out <- expand.grid(player.list, player.list)
 colnames(starting.out) <- c("Player1", "Player2")
 starting.out <- starting.out[starting.out$Player1 != starting.out$Player2,]
@@ -235,29 +231,32 @@ starting.out$TeamPtsP1 <- rep(NA, nrow(starting.out))
 starting.out$PosIMPsP1 <- rep(NA, nrow(starting.out))
 starting.out$NegIMPsP1 <- rep(NA, nrow(starting.out))
 starting.out$Forfeit <- rep("N", nrow(starting.out))
+starting.out$BenchP1 <- rep("N", nrow(starting.out))
+starting.out$BenchP2 <- rep("N", nrow(starting.out))
 starting.out$IndPtsP1 <- rep(NA, nrow(starting.out))
 
-results <- data.frame(Player1 = c("gamma57309","wyleia","dcavalier"),
-                      Player2 = c("wyleia", "dcavalier", "gamma57309"),
-                      TeamPtsP1 = as.numeric(c(4,4,4)),
-                      PosIMPsP1 = as.numeric(c(10,4,10)),
-                      NegIMPsP1 = as.numeric(c(4,4,4)),
-                      Forfeit = c("N", "N", "N"),
-                      stringsAsFactors = FALSE)
+
+# results <- data.frame(Player1 = c("gamma57309","wyleia","dcavalier"),
+#                       Player2 = c("wyleia", "dcavalier", "gamma57309"),
+#                       TeamPtsP1 = as.numeric(c(4,4,4)),
+#                       PosIMPsP1 = as.numeric(c(10,4,10)),
+#                       NegIMPsP1 = as.numeric(c(4,4,4)),
+#                       Forfeit = c("N", "N", "N"),
+#                       stringsAsFactors = FALSE)
+
+results <- importdata("~/Downloads/BFC2 Scoresheet - Sheet1 (1).csv")
 
 results <- indivpts(results)
 big.output <- getoutput(results, starting.out)
-
-plots <- makeplots(big.output)
-indiv.table <- summaryindiv(big.output)
+big.output2 <- benched(big.output)
+plots <- makeplots(big.output2)
+indiv.table <- summaryindiv(big.output2)
 team.table <- summaryteam(indiv.table)
 ```
 
 # Table Results {.tabset .tabset-fade .tabset-pills}
 
 ## Individual Results Summary
-
-
 
 ```{r sum, echo = FALSE, warning = FALSE, fig.dim=c(10,10)}
 
