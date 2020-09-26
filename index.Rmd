@@ -1,0 +1,205 @@
+---
+title: "Bridge Fight Club 2"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r funcs, echo = FALSE, warning = FALSE, message = FALSE, fig.dim=c(10,10)}
+library(dplyr)
+library(ggplot2)
+library(kableExtra)
+
+player.list <- c("barissalt",
+                 "biggeek",
+                 "bzl11",
+                 "C3Crackers",
+                 "Charlie397",
+                 "coolbeans",
+                 "cosmok",
+                 "curlingguy",
+                 "Duality",
+                 "Forrest_",
+                 "GaborF",
+                 "gamma57309",
+                 "humper",
+                 "marksmanma",
+                 "Mayjester",
+                 "MikeyAK",
+                 "Modigliana",
+                 "mounteban",
+                 "dcavalier",
+                 "njjj",
+                 "nohk",
+                 "pjmingola",
+                 "Rasern",
+                 "rustysnow",
+                 "ShinyB",
+                 "v8mama",
+                 "Vulturon",
+                 "wyleia",
+                 "ye17",
+                 "zimman")
+
+indivpts <- function(results){
+  results$IndPtsP1 <- 0
+  for(i in 1:nrow(results)){
+    ifelse(results$PosIMPsP1[i] == results$NegIMPsP1[i], 
+           results$IndPtsP1[i] <- 1,
+           ifelse(results$PosIMPsP1[i] > results$NegIMPsP1[i],
+                  results$IndPtsP1[i] <- 3,
+                  results$IndPtsP1[i] <- 0))
+  }
+  return(results)
+}
+
+p2results <- function(results){
+  if(results[6] == "Y"){
+    p2r <- c(results[2],
+             results[1],
+             0,
+             results[5],
+             results[4],
+             "Y",
+             0)
+  } else {
+    indpts <- ifelse(results[5] == results[4], 1, 
+                     ifelse(results[5] > results[4], 3, 0))
+    p2r <- c(results[2],
+             results[1],
+             8 - results[3],
+             results[5],
+             results[4],
+             "N",
+             indpts)
+  }
+  return(p2r)
+}
+
+getoutput <- function(results, out) {
+  starting.out <- out
+  for(i in 1:nrow(results)){
+    starting.out[starting.out$Player1 == results$Player1[i] &
+                 starting.out$Player2 == results$Player2[i],] <- results[i,]
+    starting.out[starting.out$Player1 == results$Player2[i] &
+                   starting.out$Player2 == results$Player1[i],] <- p2results(results[i,])
+  }
+  starting.out$TeamPtsP1 <- as.numeric(starting.out$TeamPtsP1)
+  starting.out$PosIMPsP1 <- as.numeric(starting.out$PosIMPsP1)
+  starting.out$NegIMPsP1 <- as.numeric(starting.out$NegIMPsP1)
+  return(starting.out)
+}
+
+makeplots <- function(output) {
+  output$IndPtsP1 <- as.factor(output$IndPtsP1)
+  
+  indpts <- ggplot(output, (aes(x = Player1, y = Player2, fill = IndPtsP1))) +
+    geom_tile(color = "white", size = .25) +
+    geom_text(data = output[output$IndPtsP1 != -1,], aes(label = IndPtsP1), color = "white") + theme_bw() +
+    theme(text = element_text(size = 18),
+          axis.text.x = element_text(angle = 90, hjust = 1),
+          plot.title = element_text(hjust = 0.5, face = "bold"),
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank()) +
+    xlab("") + ylab("") +
+    ggtitle("Individual Points Matrix") +
+    scale_fill_manual(values = c("#2E382E", "#72A1E5", "#9883E5"),
+                      name = "Points",
+                      labels = c("Loss", "Tie", "Win"),
+                      na.value = "white",
+                      na.translate = FALSE)
+  
+  posimps <- ggplot(output, (aes(x = Player1, y = Player2, fill = PosIMPsP1))) +
+    geom_tile(color = "white", size = .25) +
+    geom_text(data = output[!is.na(output$PosIMPsP1),], aes(label = PosIMPsP1)) + theme_bw() +
+    theme(text = element_text(size = 18),
+          axis.text.x = element_text(angle = 90, hjust = 1),
+          plot.title = element_text(hjust = 0.5, face = "bold")) +
+    xlab("") + ylab("") +
+    ggtitle("Individual Positive IMPs Matrix") +
+    scale_fill_gradient(low = "yellow", high = "red", na.value = "white", name = "Positive IMPs")
+
+  negimps <- ggplot(output, (aes(x = Player1, y = Player2, fill = NegIMPsP1))) +
+    geom_tile(color = "white", size = .25) +
+    geom_text(data = output[!is.na(output$NegIMPsP1),], aes(label = NegIMPsP1)) + theme_bw() +
+    theme(text = element_text(size = 18),
+          axis.text.x = element_text(angle = 90, hjust = 1),
+          plot.title = element_text(hjust = 0.5, face = "bold")) +
+    xlab("") + ylab("") +
+    ggtitle("Individual Negative IMPs Matrix") +
+    scale_fill_gradient(low = "yellow", high = "red", na.value = "white", name = "Negative IMPs")
+  
+  teampts <- ggplot(output, (aes(x = Player1, y = Player2, fill = TeamPtsP1))) +
+    geom_tile(color = "white", size = .25) +
+    geom_text(data = output[!is.na(output$TeamPtsP1),], aes(label = TeamPtsP1)) + theme_bw() +
+    theme(text = element_text(size = 18),
+          axis.text.x = element_text(angle = 90, hjust = 1),
+          plot.title = element_text(hjust = 0.5, face = "bold")) +
+    xlab("") + ylab("") +
+    ggtitle("Team Points Matrix") +
+    scale_fill_gradient(low = "yellow", high = "red", na.value = "white", name = "Team Points")
+  
+  plot.list <- list(indpts, posimps, negimps, teampts)
+}
+
+summarytables <- function(output){
+  indiv <- output %>% group_by(Player1) %>% summarise("Individual Points" = sum(IndPtsP1, na.rm = TRUE),
+                                                      "Team Points" = sum(TeamPtsP1, na.rm = TRUE))
+  return(indiv)
+}
+
+starting.out <- expand.grid(player.list, player.list)
+colnames(starting.out) <- c("Player1", "Player2")
+starting.out <- starting.out[starting.out$Player1 != starting.out$Player2,]
+starting.out$TeamPtsP1 <- rep(NA, nrow(starting.out))
+starting.out$PosIMPsP1 <- rep(NA, nrow(starting.out))
+starting.out$NegIMPsP1 <- rep(NA, nrow(starting.out))
+starting.out$Forfeit <- rep("N", nrow(starting.out))
+starting.out$IndPtsP1 <- rep(NA, nrow(starting.out))
+
+results <- data.frame(Player1 = c("gamma57309","wyleia","dcavalier"),
+                      Player2 = c("wyleia", "dcavalier", "gamma57309"),
+                      TeamPtsP1 = as.numeric(c(4,4,4)),
+                      PosIMPsP1 = as.numeric(c(10,4,10)),
+                      NegIMPsP1 = as.numeric(c(4,4,4)),
+                      Forfeit = c("N", "N", "N"),
+                      stringsAsFactors = FALSE)
+
+results <- indivpts(results)
+big.output <- getoutput(results, starting.out)
+
+plots <- makeplots(big.output)
+tables <- summarytables(big.output)
+```
+
+## Individual Results Summary
+
+```{r sum, echo = FALSE, warning = FALSE, fig.dim=c(10,10)}
+tables %>% kable("html") %>% kable_styling(font_size = 18, full_width = F)
+  
+```
+
+## Team Results Summary
+
+## Individual Points Matrix
+
+```{r indivmtx, echo=FALSE, warning=FALSE, fig.dim=c(10,10)}
+print(plots[[1]])
+```
+
+## Team Points Matrix
+```{r teampts, echo = FALSE, warning = FALSE, fig.dim=c(10,10)}
+print(plots[[4]])
+```
+
+## Individual Positive IMPs Matrix
+```{r indpos, echo = FALSE, warning = FALSE, fig.dim=c(10,10)}
+print(plots[[2]])
+```
+
+## Individual Negative IMPs Matrix
+```{r indneg, echo = FALSE, warning = FALSE, fig.dim=c(10,10)}
+print(plots[[3]])
+```
