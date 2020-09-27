@@ -21,25 +21,25 @@ library(readr)
 
 ## Teams
 blue <- c("Forrest_",
-          "mountebank",
+          "Mounteban",
           "nohk",
-                 "Rasern",
-                 "ye17")
+          "Rasern",
+          "ye17")
 red <- c("C3Crackers",
-  "dcavalier",
-          "Duality",
-                 "pjmingola",
-                 "v8mama")
+         "dcavalier",
+         "Duality",
+         "pjmingola",
+         "v8mama")
 orange <- c("barissalt",
-                 "cosmok",
+            "cosmok",
             "curlingguy",
-                 "humper",
-                 "zimman")
+            "humper",
+            "zimman")
 purple <- c("GaborF",
-                 "gamma57309",
+            "gamma57309",
             "MikeyAK",
-                 "ShinyB",
-                 "Vulturon")
+            "ShinyB",
+            "Vulturon")
 yellow <- c("marksmanma",
             "modigliana",
             "njjj",
@@ -48,8 +48,8 @@ yellow <- c("marksmanma",
 green <- c("biggeek",
            "bzl11",
            "Charlie397",
-            "coolbeans",
-            "Mayjester")
+           "coolbeans",
+           "Mayjester")
 
 player.list <- c(blue, green, orange, purple, red, yellow)
 
@@ -116,10 +116,10 @@ makeplots <- function(output) {
   
   team.colors <- c(rep("#3498db", 5),
                  rep("#1f8b4c", 5),
-                 rep("#f1c40f", 5),
+                 rep("orange", 5),
                  rep("#71368a", 5),
                  rep("red", 5),
-                 rep("orange", 5))
+                 rep("gold", 5))
   
   indpts <- ggplot(output, (aes(x = Player2, y = Player1, fill = IndPtsP1))) +
     geom_tile(color = "white", size = .25) +
@@ -235,7 +235,7 @@ starting.out$BenchP1 <- rep("N", nrow(starting.out))
 starting.out$BenchP2 <- rep("N", nrow(starting.out))
 starting.out$IndPtsP1 <- rep(NA, nrow(starting.out))
 
-results <- importdata("~/Downloads/BFC2 Scoresheet - Sheet1 (4).csv")
+results <- importdata("~/Downloads/BFC2 Scoresheet - Sheet1 (6).csv")
 
 results <- indivpts(results)
 big.output <- getoutput(results, starting.out)
@@ -256,7 +256,7 @@ indiv.table %>%
   kable_styling(font_size = 18, full_width = F) %>%
   row_spec(which(indiv.table$Player %in% blue), color = "#3498db") %>%
   row_spec(which(indiv.table$Player %in% green), color = "#1f8b4c") %>%
-  row_spec(which(indiv.table$Player %in% yellow), color = "#f1c40f") %>%
+  row_spec(which(indiv.table$Player %in% yellow), color = "gold") %>%
   row_spec(which(indiv.table$Player %in% purple), color = "#71368a") %>%
   row_spec(which(indiv.table$Player %in% red), color = "red") %>%
   row_spec(which(indiv.table$Player %in% orange), color = "orange")
@@ -270,7 +270,7 @@ team.table %>%
   kable_styling(font_size = 18, full_width = F) %>%
   row_spec(which(team.table$Team == "Blue"), color = "#3498db") %>%
   row_spec(which(team.table$Team == "Green"), color = "#1f8b4c") %>%
-  row_spec(which(team.table$Team == "Yellow"), color = "#f1c40f") %>%
+  row_spec(which(team.table$Team == "Yellow"), color = "gold") %>%
   row_spec(which(team.table$Team == "Purple"), color = "#71368a") %>%
   row_spec(which(team.table$Team == "Red"), color = "red") %>%
   row_spec(which(team.table$Team == "Orange"), color = "orange")
