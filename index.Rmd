@@ -122,7 +122,7 @@ makeplots <- function(output) {
                  rep("gold", 5))
   
   indpts <- ggplot(output, (aes(x = Player2, y = Player1, fill = IndPtsP1))) +
-    geom_tile(color = "white", size = .25) +
+    geom_tile(color = "black", size = .25) +
     geom_text(data = output[!is.na(output$IndPtsP1),], aes(label = IndPtsP1), color = "white") + theme_bw() +
     theme(text = element_text(size = 18),
           axis.text.x = element_text(angle = 90, hjust = 1, color = team.colors),
@@ -139,7 +139,7 @@ makeplots <- function(output) {
                       na.translate = FALSE)
   
   posimps <- ggplot(output, (aes(x = Player2, y = Player1, fill = PosIMPsP1))) +
-    geom_tile(color = "white", size = .25) +
+    geom_tile(color = "black", size = .25) +
     geom_text(data = output[!is.na(output$PosIMPsP1),], aes(label = PosIMPsP1), color = "white") + theme_bw() +
     theme(text = element_text(size = 18),
           axis.text.x = element_text(angle = 90, hjust = 1, color = team.colors),
@@ -152,7 +152,7 @@ makeplots <- function(output) {
     scale_fill_gradient(low = "blue", high = "red", na.value = "white", name = "Positive IMPs")
 
   negimps <- ggplot(output, (aes(x = Player2, y = Player1, fill = NegIMPsP1))) +
-    geom_tile(color = "white", size = .25) +
+    geom_tile(color = "black", size = .25) +
     geom_text(data = output[!is.na(output$NegIMPsP1),], aes(label = NegIMPsP1), color = "white") + theme_bw() +
     theme(text = element_text(size = 18),
           axis.text.x = element_text(angle = 90, hjust = 1, color = team.colors),
@@ -165,7 +165,7 @@ makeplots <- function(output) {
     scale_fill_gradient(low = "blue", high = "red", na.value = "white", name = "Negative IMPs")
   
   teampts <- ggplot(output, (aes(x = Player2, y = Player1, fill = TeamPtsP1))) +
-    geom_tile(color = "white", size = .25) +
+    geom_tile(color = "black", size = .25) +
     geom_text(data = output[!is.na(output$TeamPtsP1),], aes(label = TeamPtsP1), color = "white") + theme_bw() +
     theme(text = element_text(size = 18),
           axis.text.x = element_text(angle = 90, hjust = 1, color = team.colors),
