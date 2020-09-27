@@ -20,36 +20,36 @@ library(kableExtra)
 library(readr)
 
 ## Teams
-blue <- c("nohk",
-                 "pjmingola",
+blue <- c("Forrest_",
+          "mountebank",
+          "nohk",
                  "Rasern",
-                 "ye17",
-                 "zimman")
-red <- c("MikeyAK",
-                 "Modigliana",
-                 "mounteban",
-                 "dcavalier",
-                 "njjj")
+                 "ye17")
+red <- c("C3Crackers",
+  "dcavalier",
+          "Duality",
+                 "pjmingola",
+                 "v8mama")
 orange <- c("barissalt",
-                 "biggeek",
-                 "bzl11",
-                 "C3Crackers",
-                 "Charlie397")
+                 "cosmok",
+            "curlingguy",
+                 "humper",
+                 "zimman")
 purple <- c("GaborF",
                  "gamma57309",
-                 "humper",
-                 "marksmanma",
-                 "Mayjester")
-yellow <- c("rustysnow",
+            "MikeyAK",
                  "ShinyB",
-                 "v8mama",
-                 "Vulturon",
-                 "wyleia")
-green <- c("coolbeans",
-                 "cosmok",
-                 "curlingguy",
-                 "Duality",
-                 "Forrest_")
+                 "Vulturon")
+yellow <- c("marksmanma",
+            "modigliana",
+            "njjj",
+            "rustysnow",
+            "wyleia")
+green <- c("biggeek",
+           "bzl11",
+           "Charlie397",
+            "coolbeans",
+            "Mayjester")
 
 player.list <- c(blue, green, orange, purple, red, yellow)
 
@@ -120,14 +120,13 @@ makeplots <- function(output) {
                  rep("#71368a", 5),
                  rep("red", 5),
                  rep("orange", 5))
-#, color = team.colors
-  #axis.text.y = element_text(color = team.colors)
+  
   indpts <- ggplot(output, (aes(x = Player2, y = Player1, fill = IndPtsP1))) +
     geom_tile(color = "white", size = .25) +
     geom_text(data = output[!is.na(output$IndPtsP1),], aes(label = IndPtsP1), color = "white") + theme_bw() +
     theme(text = element_text(size = 18),
-          axis.text.x = element_text(angle = 90, hjust = 1),
-  
+          axis.text.x = element_text(angle = 90, hjust = 1, color = team.colors),
+          axis.text.y = element_text(color = team.colors),
           plot.title = element_text(hjust = 0.5, face = "bold"),
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank()) +
@@ -143,8 +142,8 @@ makeplots <- function(output) {
     geom_tile(color = "white", size = .25) +
     geom_text(data = output[!is.na(output$PosIMPsP1),], aes(label = PosIMPsP1), color = "white") + theme_bw() +
     theme(text = element_text(size = 18),
-          axis.text.x = element_text(angle = 90, hjust = 1),
-
+          axis.text.x = element_text(angle = 90, hjust = 1, color = team.colors),
+          axis.text.y = element_text(color = team.colors),
           plot.title = element_text(hjust = 0.5, face = "bold"),
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank()) +
@@ -156,8 +155,8 @@ makeplots <- function(output) {
     geom_tile(color = "white", size = .25) +
     geom_text(data = output[!is.na(output$NegIMPsP1),], aes(label = NegIMPsP1), color = "white") + theme_bw() +
     theme(text = element_text(size = 18),
-          axis.text.x = element_text(angle = 90, hjust = 1),
-
+          axis.text.x = element_text(angle = 90, hjust = 1, color = team.colors),
+          axis.text.y = element_text(color = team.colors),
           plot.title = element_text(hjust = 0.5, face = "bold"),
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank()) +
@@ -169,8 +168,8 @@ makeplots <- function(output) {
     geom_tile(color = "white", size = .25) +
     geom_text(data = output[!is.na(output$TeamPtsP1),], aes(label = TeamPtsP1), color = "white") + theme_bw() +
     theme(text = element_text(size = 18),
-          axis.text.x = element_text(angle = 90, hjust = 1),
-      
+          axis.text.x = element_text(angle = 90, hjust = 1, color = team.colors),
+          axis.text.y = element_text(color = team.colors),    
           plot.title = element_text(hjust = 0.5, face = "bold"),
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank()) +
@@ -236,15 +235,6 @@ starting.out$BenchP1 <- rep("N", nrow(starting.out))
 starting.out$BenchP2 <- rep("N", nrow(starting.out))
 starting.out$IndPtsP1 <- rep(NA, nrow(starting.out))
 
-
-# results <- data.frame(Player1 = c("gamma57309","wyleia","dcavalier"),
-#                       Player2 = c("wyleia", "dcavalier", "gamma57309"),
-#                       TeamPtsP1 = as.numeric(c(4,4,4)),
-#                       PosIMPsP1 = as.numeric(c(10,4,10)),
-#                       NegIMPsP1 = as.numeric(c(4,4,4)),
-#                       Forfeit = c("N", "N", "N"),
-#                       stringsAsFactors = FALSE)
-
 results <- importdata("~/Downloads/BFC2 Scoresheet - Sheet1 (4).csv")
 
 results <- indivpts(results)
@@ -263,13 +253,13 @@ team.table <- summaryteam(indiv.table)
 
 indiv.table %>% 
   kable("html") %>% 
-  kable_styling(font_size = 18, full_width = F)
-  # row_spec(which(indiv.table$Player %in% blue), color = "#3498db") %>%
-  # row_spec(which(indiv.table$Player %in% green), color = "#1f8b4c") %>%
-  # row_spec(which(indiv.table$Player %in% yellow), color = "#f1c40f") %>%
-  # row_spec(which(indiv.table$Player %in% purple), color = "#71368a") %>%
-  # row_spec(which(indiv.table$Player %in% red), color = "red") %>%
-  # row_spec(which(indiv.table$Player %in% orange), color = "orange") 
+  kable_styling(font_size = 18, full_width = F) %>%
+  row_spec(which(indiv.table$Player %in% blue), color = "#3498db") %>%
+  row_spec(which(indiv.table$Player %in% green), color = "#1f8b4c") %>%
+  row_spec(which(indiv.table$Player %in% yellow), color = "#f1c40f") %>%
+  row_spec(which(indiv.table$Player %in% purple), color = "#71368a") %>%
+  row_spec(which(indiv.table$Player %in% red), color = "red") %>%
+  row_spec(which(indiv.table$Player %in% orange), color = "orange")
 ```
 
 ## Team Results Summary
@@ -277,13 +267,13 @@ indiv.table %>%
 ```{r teamsum, echo = FALSE, warning = FALSE, fig.dim=c(10,10)}
 team.table %>%
   kable("html", row.names = FALSE) %>%
-  kable_styling(font_size = 18, full_width = F)
-  # row_spec(which(team.table$Team == "Blue"), color = "#3498db") %>%
-  # row_spec(which(team.table$Team == "Green"), color = "#1f8b4c") %>%
-  # row_spec(which(team.table$Team == "Yellow"), color = "#f1c40f") %>%
-  # row_spec(which(team.table$Team == "Purple"), color = "#71368a") %>%
-  # row_spec(which(team.table$Team == "Red"), color = "red") %>%
-  # row_spec(which(team.table$Team == "Orange"), color = "orange")
+  kable_styling(font_size = 18, full_width = F) %>%
+  row_spec(which(team.table$Team == "Blue"), color = "#3498db") %>%
+  row_spec(which(team.table$Team == "Green"), color = "#1f8b4c") %>%
+  row_spec(which(team.table$Team == "Yellow"), color = "#f1c40f") %>%
+  row_spec(which(team.table$Team == "Purple"), color = "#71368a") %>%
+  row_spec(which(team.table$Team == "Red"), color = "red") %>%
+  row_spec(which(team.table$Team == "Orange"), color = "orange")
 ```
 
 # Matrix Results {.tabset .tabset-fade .tabset-pills}
