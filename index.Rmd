@@ -37,6 +37,8 @@ library(kableExtra)
 library(readr)
 library(gsheet)
 
+setwd("/Users/ds65/Desktop/Bridge/bfc2/twitch-bridge.github.io/")
+
 ## Teams
 blue <- c("forrest_",
           "mounteban",
