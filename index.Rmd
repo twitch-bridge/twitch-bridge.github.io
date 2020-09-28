@@ -273,7 +273,7 @@ starting.out$BenchP1 <- rep("N", nrow(starting.out))
 starting.out$BenchP2 <- rep("N", nrow(starting.out))
 starting.out$IndPtsP1 <- rep(NA, nrow(starting.out))
 
-results <- importdata("~/Downloads/BFC2 Scoresheet - Sheet1 (10).csv")
+results <- importdata("~/Downloads/BFC2 Scoresheet - Sheet1 (11).csv")
 
 results <- indivpts(results)
 big.output <- getoutput(results, starting.out)
