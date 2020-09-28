@@ -20,14 +20,14 @@ library(kableExtra)
 library(readr)
 
 ## Teams
-blue <- c("Forrest_",
-          "Mounteban",
+blue <- c("forrest_",
+          "mounteban",
           "nohk",
-          "Rasern",
+          "rasern",
           "ye17")
-red <- c("C3Crackers",
+red <- c("c3crackers",
          "dcavalier",
-         "Duality",
+         "duality",
          "pjmingola",
          "v8mama")
 orange <- c("barissalt",
@@ -35,11 +35,11 @@ orange <- c("barissalt",
             "curlingguy",
             "humper",
             "zimman")
-purple <- c("GaborF",
+purple <- c("gaborf",
             "gamma57309",
-            "MikeyAK",
-            "ShinyB",
-            "Vulturon")
+            "mikeyak",
+            "shinyb",
+            "vulturon")
 yellow <- c("marksmanma",
             "modigliana",
             "njjj",
@@ -47,9 +47,11 @@ yellow <- c("marksmanma",
             "wyleia")
 green <- c("biggeek",
            "bzl11",
-           "Charlie397",
+           "charlie397",
            "coolbeans",
-           "Mayjester")
+           "mayjester")
+
+
 
 player.list <- c(blue, green, orange, purple, red, yellow)
 
@@ -221,6 +223,12 @@ importdata <- function(path){
   data <- data[,c(1,6,3,2,7,8,4,9)]
   colnames(data) <- c("Player1", "Player2","TeamPtsP1","PosIMPsP1",
                       "NegIMPsP1","Forfeit","BenchP1","BenchP2")
+  data$Player1 <- tolower(data$Player1)
+  data$Player2 <- tolower(data$Player2)
+  
+  stopifnot(sum(unique(c(data$Player1, data$Player2)) %in% player.list) == 
+     length(unique(c(data$Player1, data$Player2))))
+  
   return(data)
 }
 
@@ -235,7 +243,7 @@ starting.out$BenchP1 <- rep("N", nrow(starting.out))
 starting.out$BenchP2 <- rep("N", nrow(starting.out))
 starting.out$IndPtsP1 <- rep(NA, nrow(starting.out))
 
-results <- importdata("~/Downloads/BFC2 Scoresheet - Sheet1 (6).csv")
+results <- importdata("~/Downloads/BFC2 Scoresheet - Sheet1 (7).csv")
 
 results <- indivpts(results)
 big.output <- getoutput(results, starting.out)
