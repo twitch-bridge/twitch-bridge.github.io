@@ -128,7 +128,7 @@ makeplots <- function(output) {
     geom_tile(color = "black", size = .25) +
     geom_text(data = output[!is.na(output$IndPtsP1),], aes(label = IndPtsP1), color = "white") + theme_bw() +
     theme(text = element_text(size = 18),
-          axis.text.x = element_text(angle = 90, hjust = 1, color = team.colors),
+          axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5, color = team.colors),
           axis.text.y = element_text(color = team.colors),
           plot.title = element_text(hjust = 0.5, face = "bold"),
           panel.grid.major = element_blank(),
@@ -145,7 +145,7 @@ makeplots <- function(output) {
     geom_tile(color = "black", size = .25) +
     geom_text(data = output[!is.na(output$PosIMPsP1),], aes(label = PosIMPsP1), color = "white") + theme_bw() +
     theme(text = element_text(size = 18),
-          axis.text.x = element_text(angle = 90, hjust = 1, color = team.colors),
+          axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5, color = team.colors),
           axis.text.y = element_text(color = team.colors),
           plot.title = element_text(hjust = 0.5, face = "bold"),
           panel.grid.major = element_blank(),
@@ -158,7 +158,7 @@ makeplots <- function(output) {
     geom_tile(color = "black", size = .25) +
     geom_text(data = output[!is.na(output$NegIMPsP1),], aes(label = NegIMPsP1), color = "white") + theme_bw() +
     theme(text = element_text(size = 18),
-          axis.text.x = element_text(angle = 90, hjust = 1, color = team.colors),
+          axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5, color = team.colors),
           axis.text.y = element_text(color = team.colors),
           plot.title = element_text(hjust = 0.5, face = "bold"),
           panel.grid.major = element_blank(),
@@ -171,7 +171,7 @@ makeplots <- function(output) {
     geom_tile(color = "black", size = .25) +
     geom_text(data = output[!is.na(output$TeamPtsP1),], aes(label = TeamPtsP1), color = "white") + theme_bw() +
     theme(text = element_text(size = 18),
-          axis.text.x = element_text(angle = 90, hjust = 1, color = team.colors),
+          axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5, color = team.colors),
           axis.text.y = element_text(color = team.colors),    
           plot.title = element_text(hjust = 0.5, face = "bold"),
           panel.grid.major = element_blank(),
@@ -185,7 +185,8 @@ makeplots <- function(output) {
 
 summaryindiv <- function(output){
   indiv <- output %>% group_by(Player1) %>% summarise("Individual Points" = sum(IndPtsP1, na.rm = TRUE),
-                                                      "Team Points" = sum(TeamPtsP1, na.rm = TRUE))
+                                                      "Team Points" = sum(TeamPtsP1, na.rm = TRUE),
+                                                      "Matches Completed" = sum(!is.na(IndPtsP1), na.rm = TRUE))
   colnames(indiv)[1] <- c("Player")
   
   indiv <- indiv[order(rowSums(indiv[,2:3]), decreasing = TRUE),]
@@ -201,10 +202,22 @@ summaryteam <- function(indiv) {
   purplepts <- sum(indiv$`Team Points`[indiv$Player %in% purple])
   yellowpts <- sum(indiv$`Team Points`[indiv$Player %in% yellow])
 
+  bluematches <- sum(indiv$`Matches Completed`[indiv$Player %in% blue]) 
+  greenmatches <- sum(indiv$`Matches Completed`[indiv$Player %in% green]) 
+  orangematches <- sum(indiv$`Matches Completed`[indiv$Player %in% orange]) 
+  redmatches <- sum(indiv$`Matches Completed`[indiv$Player %in% red]) 
+  purplematches <- sum(indiv$`Matches Completed`[indiv$Player %in% purple]) 
+  yellowmatches <- sum(indiv$`Matches Completed`[indiv$Player %in% yellow]) 
+  
   team <- data.frame(Team = c("Blue", "Green", "Orange", "Yellow", "Red", "Purple"),
-                     Points = c(bluepts, greenpts, orangepts, yellowpts, redpts, purplepts))
+                     Points = c(bluepts, greenpts, orangepts, yellowpts, redpts, purplepts),
+                     'Matches Completed' = c(bluematches, greenmatches,orangematches,
+                                             yellowmatches,redmatches,purplematches),
+                     check.names = F)
   
   team <- team[order(team$Points, decreasing = TRUE),]
+  
+  
   
   return(team)
 }
@@ -261,7 +274,7 @@ team.table <- summaryteam(indiv.table)
 ```{r sum, echo = FALSE, warning = FALSE, fig.dim=c(10,10)}
 
 indiv.table %>% 
-  kable("html") %>% 
+  kable("html", align = c("l","c","c","c")) %>% 
   kable_styling(font_size = 18, full_width = F) %>%
   row_spec(which(indiv.table$Player %in% blue), color = "#3498db") %>%
   row_spec(which(indiv.table$Player %in% green), color = "#1f8b4c") %>%
@@ -275,7 +288,7 @@ indiv.table %>%
 
 ```{r teamsum, echo = FALSE, warning = FALSE, fig.dim=c(10,10)}
 team.table %>%
-  kable("html", row.names = FALSE) %>%
+  kable("html", row.names = FALSE, align = c("l","c","c")) %>%
   kable_styling(font_size = 18, full_width = F) %>%
   row_spec(which(team.table$Team == "Blue"), color = "#3498db") %>%
   row_spec(which(team.table$Team == "Green"), color = "#1f8b4c") %>%
