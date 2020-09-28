@@ -12,6 +12,12 @@ knitr::opts_chunk$set(echo = TRUE)
 h1, h2, h3, h4 {
   text-align: center;
 }
+
+# body {
+#   background-image: url('https://github.com/twitch-bridge/twitch-bridge.github.io/blob/master/bridge-cards.jpg?raw=true');
+#   background-repeat: repeat;
+#   background-size: 100%;
+# }
 ```
 
 ```{r funcs, echo = FALSE, warning = FALSE, message = FALSE, fig.dim=c(10,10)}
