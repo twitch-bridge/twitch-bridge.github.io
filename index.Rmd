@@ -1,6 +1,7 @@
 ---
 title: "Bridge Fight Club 2"
 output: html_document
+date: "`r paste('Last updated ', format(Sys.time(), '%H:%M %d %B, %Y'), sep = '')`"
 ---
 
 ```{r setup, include=FALSE}
@@ -8,7 +9,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{css center, echo = FALSE}
-h1, h2, h3 {
+h1, h2, h3, h4 {
   text-align: center;
 }
 ```
