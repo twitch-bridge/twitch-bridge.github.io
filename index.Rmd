@@ -35,6 +35,7 @@ library(dplyr)
 library(ggplot2)
 library(kableExtra)
 library(readr)
+library(gsheet)
 
 ## Teams
 blue <- c("forrest_",
@@ -248,8 +249,9 @@ benched <- function(output){
 }
 
 
-importdata <- function(path){
-  data <- read_csv(path, skip = 1)
+importdata <- function(url){
+  raw <- gsheet2text(url)
+  data <- read_csv(raw, skip = 1)
   data <- data[,c(1,6,3,2,7,8,4,9)]
   colnames(data) <- c("Player1", "Player2","TeamPtsP1","PosIMPsP1",
                       "NegIMPsP1","Forfeit","BenchP1","BenchP2")
@@ -273,7 +275,7 @@ starting.out$BenchP1 <- rep("N", nrow(starting.out))
 starting.out$BenchP2 <- rep("N", nrow(starting.out))
 starting.out$IndPtsP1 <- rep(NA, nrow(starting.out))
 
-results <- importdata("~/Downloads/BFC2 Scoresheet - Sheet1 (12).csv")
+results <- importdata("https://docs.google.com/spreadsheets/d/1K11JHyo3mDr3si39RHgQGbUnmM6w4bWtUaL1Jp-XG-s/edit#gid=0")
 
 results <- indivpts(results)
 big.output <- getoutput(results, starting.out)
