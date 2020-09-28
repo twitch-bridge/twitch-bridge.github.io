@@ -1,7 +1,7 @@
 ---
 title: "Bridge Fight Club 2"
 output: html_document
-date: "`r paste('Last updated ', format(Sys.time(), '%H:%M'), ' EST ', format(Sys.time(), '%B %d, %Y'), sep = '')`"
+date: "`r paste('Last updated ', format(Sys.time(), '%H:%M'), ' EDT ', format(Sys.time(), '%B %d, %Y'), sep = '')`"
 ---
 
 ```{r setup, include=FALSE}
@@ -244,7 +244,7 @@ starting.out$BenchP1 <- rep("N", nrow(starting.out))
 starting.out$BenchP2 <- rep("N", nrow(starting.out))
 starting.out$IndPtsP1 <- rep(NA, nrow(starting.out))
 
-results <- importdata("~/Downloads/BFC2 Scoresheet - Sheet1 (7).csv")
+results <- importdata("~/Downloads/BFC2 Scoresheet - Sheet1 (8).csv")
 
 results <- indivpts(results)
 big.output <- getoutput(results, starting.out)
