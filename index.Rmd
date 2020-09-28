@@ -14,9 +14,19 @@ h1, h2, h3, h4 {
 }
 
 # body {
-#   background-image: url('https://github.com/twitch-bridge/twitch-bridge.github.io/blob/master/bridge-cards.jpg?raw=true');
-#   background-repeat: repeat;
+#   background-image: url('https://github.com/twitch-bridge/twitch-bridge.github.io/blob/master/wyleia_logo.png?raw=true');
+#   background-repeat: no-repeat;
 #   background-size: 100%;
+}
+
+# body::before {
+#     content: "";
+#     position: absolute;
+#     top: 0px;
+#     right: 0px;
+#     bottom: 0px;
+#     left: 0px;
+#     background-color: rgba(0,0,0,0.25);
 # }
 ```
 
@@ -263,7 +273,7 @@ starting.out$BenchP1 <- rep("N", nrow(starting.out))
 starting.out$BenchP2 <- rep("N", nrow(starting.out))
 starting.out$IndPtsP1 <- rep(NA, nrow(starting.out))
 
-results <- importdata("~/Downloads/BFC2 Scoresheet - Sheet1 (8).csv")
+results <- importdata("~/Downloads/BFC2 Scoresheet - Sheet1 (9).csv")
 
 results <- indivpts(results)
 big.output <- getoutput(results, starting.out)
