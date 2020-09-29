@@ -13,11 +13,11 @@ h1, h2, h3, h4 {
   text-align: center;
 }
 
-# body {
-#   background-image: url('https://github.com/twitch-bridge/twitch-bridge.github.io/blob/master/wyleia_logo10.png?raw=true');
-#   background-repeat: no-repeat;
-#   background-size: 100%;
-# }
+body {
+  background-image: url('https://github.com/twitch-bridge/twitch-bridge.github.io/blob/master/wyleia_logo10.png?raw=true');
+  background-repeat: no-repeat;
+  background-size: 100%;
+}
 
 # body::before {
 #     content: "";
