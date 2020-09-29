@@ -240,7 +240,7 @@ summaryteam <- function(indiv) {
                      check.names = F)
   
   team$`Points/Match` <- format(round(team$`Points/Match`, 2), nsmall = 2)
-  
+  team$`Points/Match` <- as.numeric(as.character(team$`Points/Match`))
   team <- team[order(team$`Points/Match`, decreasing = TRUE),]
   
   
@@ -327,10 +327,16 @@ team.table %>%
   row_spec(which(team.table$Team == "Orange"), color = "orange")
 ```
 
-## Sad Sortable Table
+## Individual Results (Sortable)
 
 ```{r dt, echo = FALSE, warning = FALSE, message = FALSE}
 datatable(indiv.table)
+```
+
+## Team Results (Sortable)
+
+```{r dt.team, echo = FALSE, warning = FALSE, message = FALSE}
+datatable(team.table)
 ```
 
 # Matrix Results {.tabset .tabset-fade .tabset-pills}
