@@ -327,13 +327,13 @@ team.table %>%
   row_spec(which(team.table$Team == "Orange"), color = "orange")
 ```
 
-## Individual Results (Sortable)
+## Sad Sortable Table (Individual)
 
 ```{r dt, echo = FALSE, warning = FALSE, message = FALSE}
 datatable(indiv.table)
 ```
 
-## Team Results (Sortable)
+## Sad Sortable Table (Team)
 
 ```{r dt.team, echo = FALSE, warning = FALSE, message = FALSE}
 datatable(team.table)
