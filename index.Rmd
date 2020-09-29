@@ -36,6 +36,7 @@ library(ggplot2)
 library(kableExtra)
 library(readr)
 library(gsheet)
+library(DT)
 
 setwd("/Users/ds65/Desktop/Bridge/bfc2/twitch-bridge.github.io/")
 
@@ -301,7 +302,8 @@ team.table <- summaryteam(indiv.table)
 
 indiv.table %>% 
   kable("html", align = c("l","c","c","c")) %>% 
-  kable_styling(font_size = 18, full_width = F) %>%
+  kable_styling(font_size = 18, full_width = F,
+                bootstrap_options = c("striped", "hover")) %>%
   row_spec(which(indiv.table$Player %in% blue), color = "#3498db") %>%
   row_spec(which(indiv.table$Player %in% green), color = "#1f8b4c") %>%
   row_spec(which(indiv.table$Player %in% yellow), color = "gold") %>%
@@ -315,13 +317,20 @@ indiv.table %>%
 ```{r teamsum, echo = FALSE, warning = FALSE, fig.dim=c(10,10)}
 team.table %>%
   kable("html", row.names = FALSE, align = c("l","c","c","c")) %>%
-  kable_styling(font_size = 18, full_width = F) %>%
+  kable_styling(font_size = 18, full_width = F,
+                bootstrap_options = c("striped", "hover")) %>%
   row_spec(which(team.table$Team == "Blue"), color = "#3498db") %>%
   row_spec(which(team.table$Team == "Green"), color = "#1f8b4c") %>%
   row_spec(which(team.table$Team == "Yellow"), color = "gold") %>%
   row_spec(which(team.table$Team == "Purple"), color = "#71368a") %>%
   row_spec(which(team.table$Team == "Red"), color = "red") %>%
   row_spec(which(team.table$Team == "Orange"), color = "orange")
+```
+
+## Sad Sortable Table
+
+```{r dt, echo = FALSE, warning = FALSE, message = FALSE}
+datatable(indiv.table)
 ```
 
 # Matrix Results {.tabset .tabset-fade .tabset-pills}
