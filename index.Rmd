@@ -209,7 +209,7 @@ summaryindiv <- function(output){
                                                       "Matches Completed" = sum(!is.na(IndPtsP1), na.rm = TRUE))
   colnames(indiv)[1] <- c("Player")
   
-  indiv <- indiv[order(rowSums(indiv[,2:3]), decreasing = TRUE),]
+  indiv <- indiv[order(rowSums(indiv[,2:3])/indiv[,4], decreasing = TRUE),]
   
   return(indiv)
 }
@@ -233,9 +233,14 @@ summaryteam <- function(indiv) {
                      Points = c(bluepts, greenpts, orangepts, yellowpts, redpts, purplepts),
                      'Matches Completed' = c(bluematches, greenmatches,orangematches,
                                              yellowmatches,redmatches,purplematches),
+                     'Points/Match' = c(bluepts/bluematches, greenpts/greenmatches,
+                                        orangepts/orangematches, yellowpts/yellowmatches,
+                                        redpts/redmatches, purplepts/purplematches),
                      check.names = F)
   
-  team <- team[order(team$Points, decreasing = TRUE),]
+  team$`Points/Match` <- format(round(team$`Points/Match`, 2), nsmall = 2)
+  
+  team <- team[order(team$`Points/Match`, decreasing = TRUE),]
   
   
   
@@ -309,7 +314,7 @@ indiv.table %>%
 
 ```{r teamsum, echo = FALSE, warning = FALSE, fig.dim=c(10,10)}
 team.table %>%
-  kable("html", row.names = FALSE, align = c("l","c","c")) %>%
+  kable("html", row.names = FALSE, align = c("l","c","c","c")) %>%
   kable_styling(font_size = 18, full_width = F) %>%
   row_spec(which(team.table$Team == "Blue"), color = "#3498db") %>%
   row_spec(which(team.table$Team == "Green"), color = "#1f8b4c") %>%
