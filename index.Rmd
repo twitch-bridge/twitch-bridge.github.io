@@ -171,7 +171,7 @@ makeplots <- function(output) {
           panel.grid.minor = element_blank()) +
     xlab("Opponent") + ylab("You") +
     ggtitle("Individual Positive IMPs Matrix") +
-    scale_fill_gradient(low = "blue", high = "red", na.value = "white", name = "Positive IMPs")
+    scale_fill_gradient(low = "blue", high = "orange", na.value = "white", name = "Positive IMPs")
 
   negimps <- ggplot(output, (aes(x = Player2, y = Player1, fill = NegIMPsP1))) +
     geom_tile(color = "black", size = .25) +
@@ -184,7 +184,7 @@ makeplots <- function(output) {
           panel.grid.minor = element_blank()) +
     xlab("Opponent") + ylab("You") +
     ggtitle("Individual Negative IMPs Matrix") +
-    scale_fill_gradient(low = "blue", high = "red", na.value = "white", name = "Negative IMPs")
+    scale_fill_gradient(low = "blue", high = "orange", na.value = "white", name = "Negative IMPs")
   
   teampts <- ggplot(output, (aes(x = Player2, y = Player1, fill = TeamPtsP1))) +
     geom_tile(color = "black", size = .25) +
@@ -197,7 +197,8 @@ makeplots <- function(output) {
           panel.grid.minor = element_blank()) +
     xlab("Opponent") + ylab("You") +
     ggtitle("Team Points Matrix") +
-    scale_fill_gradient(low = "blue", high = "red", na.value = "white", name = "Team Points")
+    scale_fill_gradient(low = "blue", high = "orange",
+                        na.value = "white", name = "Team Points")
   
   plot.list <- list(indpts, posimps, negimps, teampts)
 }
